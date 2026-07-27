@@ -19,6 +19,13 @@ class BingXClient:
     def __init__(self, api_key: Optional[str] = None, secret_key: Optional[str] = None):
         self.api_key = (api_key or settings.BINGX_API_KEY).strip()
         self.secret_key = (secret_key or settings.BINGX_SECRET_KEY).strip()
+        
+        # DEBUG: Mostrar qué clave se está cargando (ocultando el medio por seguridad)
+        if len(self.api_key) > 10:
+            masked_key = f"{self.api_key[:5]}...{self.api_key[-5:]} (Largo: {len(self.api_key)})"
+        else:
+            masked_key = f"{self.api_key} (Largo: {len(self.api_key)})"
+        print(f"[DEBUG BINGX CLIENT] API Key cargada en memoria: {masked_key}")
 
     def _generate_signature(self, params: Dict[str, Any]) -> str:
         """
