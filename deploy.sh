@@ -8,13 +8,13 @@ echo "🚀 Iniciando despliegue de CLR BingX Trading Bot..."
 if ! command -v docker &> /dev/null; then
     echo "📦 Instalando Docker y Docker Compose..."
     sudo apt-get update
-    sudo apt-get install -y docker.io docker-compose-plugin
+    sudo apt-get install -y docker.io docker-compose
     sudo systemctl enable --now docker
 fi
 
 # Construir y levantar contenedores
 echo "🔨 Construyendo e iniciando contenedores..."
-sudo docker compose up -d --build
+sudo docker-compose up -d --build
 
 echo "✅ ¡Despliegue completado exitosamente!"
 echo "🌐 Accede al Dashboard en la IP de tu Droplet: http://$(curl -s ifconfig.me)"
