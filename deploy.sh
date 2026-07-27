@@ -29,6 +29,7 @@ fi
 
 # Construir y levantar contenedores
 echo "🔨 Construyendo e iniciando contenedores..."
+sudo docker rm -f clr_bingx_bot || true
 sudo docker-compose up -d --build
 
 echo "✅ ¡Despliegue completado exitosamente!"
