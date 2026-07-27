@@ -58,11 +58,19 @@ command=python -m uvicorn app.main:app --host 127.0.0.1 --port 8000 \n\
 directory=/app/backend \n\
 autostart=true \n\
 autorestart=true \n\
+stdout_logfile=/dev/stdout \n\
+stdout_logfile_maxbytes=0 \n\
+stderr_logfile=/dev/stderr \n\
+stderr_logfile_maxbytes=0 \n\
 \n\
 [program:nginx] \n\
 command=nginx -g "daemon off;" \n\
 autostart=true \n\
 autorestart=true \n\
+stdout_logfile=/dev/stdout \n\
+stdout_logfile_maxbytes=0 \n\
+stderr_logfile=/dev/stderr \n\
+stderr_logfile_maxbytes=0 \n\
 ' > /etc/supervisor/conf.d/supervisord.conf
 
 EXPOSE 80
