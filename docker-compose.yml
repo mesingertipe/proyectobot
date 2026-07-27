@@ -9,12 +9,7 @@ services:
     restart: always
     ports:
       - "80:80"
-    environment:
-      - BINGX_API_KEY=${BINGX_API_KEY:-demo_api_key}
-      - BINGX_SECRET_KEY=${BINGX_SECRET_KEY:-demo_secret_key}
-      - BINGX_IS_DEMO=${BINGX_IS_DEMO:-true}
-      - WEBHOOK_PASSPHRASE=${WEBHOOK_PASSPHRASE:-clr_bingx_secret_passphrase_2026}
-      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN:-}
-      - TELEGRAM_CHAT_ID=${TELEGRAM_CHAT_ID:-}
+    env_file:
+      - .env
     volumes:
       - ./data:/app/backend/data
