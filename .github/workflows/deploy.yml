@@ -23,6 +23,7 @@ jobs:
           script: |
             cd /root/CLR-Trading || git clone https://github.com/${{ github.repository }}.git /root/CLR-Trading
             cd /root/CLR-Trading
+            git reset --hard HEAD
             git pull origin main || git pull origin master
             chmod +x deploy.sh
             ./deploy.sh
