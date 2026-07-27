@@ -6,11 +6,16 @@ echo "🚀 Iniciando despliegue de CLR BingX Trading Bot..."
 
 # Actualizar e instalar Docker si no existe
 if ! command -v docker &> /dev/null; then
-    echo "📦 Instalando Docker y Docker Compose..."
+    echo "📦 Instalando Docker..."
     sudo apt-get update
-    sudo apt-get install -y docker.io docker-compose
+    sudo apt-get install -y docker.io
     sudo systemctl enable --now docker
 fi
+
+echo "📦 Instalando docker-compose v2 (moderno)..."
+sudo curl -L "https://github.com/docker/compose/releases/download/v2.24.5/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+sudo ln -sf /usr/local/bin/docker-compose /usr/bin/docker-compose
 
 # Crear archivo de paginación (Swap) si no existe (evita errores de falta de memoria al compilar el Frontend)
 if [ ! -f /swapfile ]; then
@@ -24,7 +29,7 @@ fi
 
 # Construir y levantar contenedores
 echo "🔨 Construyendo e iniciando contenedores..."
-sudo DOCKER_BUILDKIT=0 COMPOSE_DOCKER_CLI_BUILD=0 docker-compose up -d --build
+sudo docker-compose up -d --build
 
 echo "✅ ¡Despliegue completado exitosamente!"
 echo "🌐 Accede al Dashboard en la IP de tu Droplet: http://$(curl -s ifconfig.me)"
