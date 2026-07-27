@@ -12,6 +12,16 @@ if ! command -v docker &> /dev/null; then
     sudo systemctl enable --now docker
 fi
 
+# Crear archivo de paginación (Swap) si no existe (evita errores de falta de memoria al compilar el Frontend)
+if [ ! -f /swapfile ]; then
+    echo "💾 Creando archivo Swap de 1GB para evitar errores de memoria (SIGKILL)..."
+    sudo fallocate -l 1G /swapfile
+    sudo chmod 600 /swapfile
+    sudo mkswap /swapfile
+    sudo swapon /swapfile
+    echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
+fi
+
 # Construir y levantar contenedores
 echo "🔨 Construyendo e iniciando contenedores..."
 sudo docker-compose up -d --build
