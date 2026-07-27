@@ -1,6 +1,0 @@
-D:\Tito Pedraza\OneDrive\Proyectos\Codigo Fuente\repos\CLR Trading\CLRTrading\obj\Debug\CLRTrading.csproj.AssemblyReference.cache
-D:\Tito Pedraza\OneDrive\Proyectos\Codigo Fuente\repos\CLR Trading\CLRTrading\obj\Debug\CLRTrading.csproj.CoreCompileInputs.cache
-D:\Tito Pedraza\OneDrive\Proyectos\Codigo Fuente\repos\CLR Trading\CLRTrading\bin\Debug\CLRTrading.dll
-D:\Tito Pedraza\OneDrive\Proyectos\Codigo Fuente\repos\CLR Trading\CLRTrading\bin\Debug\CLRTrading.pdb
-D:\Tito Pedraza\OneDrive\Proyectos\Codigo Fuente\repos\CLR Trading\CLRTrading\obj\Debug\CLRTrading.dll
-D:\Tito Pedraza\OneDrive\Proyectos\Codigo Fuente\repos\CLR Trading\CLRTrading\obj\Debug\CLRTrading.pdb
