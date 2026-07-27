@@ -17,8 +17,8 @@ class BingXClient:
     BASE_URL = "https://open-api.bingx.com"
 
     def __init__(self, api_key: Optional[str] = None, secret_key: Optional[str] = None):
-        self.api_key = api_key or settings.BINGX_API_KEY
-        self.secret_key = secret_key or settings.BINGX_SECRET_KEY
+        self.api_key = (api_key or settings.BINGX_API_KEY).strip()
+        self.secret_key = (secret_key or settings.BINGX_SECRET_KEY).strip()
 
     def _generate_signature(self, params: Dict[str, Any]) -> str:
         """
