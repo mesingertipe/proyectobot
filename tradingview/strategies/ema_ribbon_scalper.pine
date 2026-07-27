@@ -1,0 +1,24 @@
+//@version=5
+strategy("BingX Bot - EMA Ribbon Scalper 15m [CLR]", overlay=true, initial_capital=100)
+
+// EMAs rápidas y lentas
+fastEma = ta.ema(close, 9)
+medEma = ta.ema(close, 21)
+slowEma = ta.ema(close, 50)
+
+plot(fastEma, color=color.green, title="EMA 9")
+plot(medEma, color=color.orange, title="EMA 21")
+plot(slowEma, color=color.red, title="EMA 50")
+
+rsi = ta.rsi(close, 14)
+
+longCond = ta.crossover(fastEma, medEma) and close > slowEma and rsi > 50
+shortCond = ta.crossunder(fastEma, medEma) and close < slowEma and rsi < 50
+
+if (longCond)
+    strategy.entry("Buy_Long", strategy.long)
+    strategy.exit("SL_TP_Long", "Buy_Long", stop=close * 0.985, limit=close * 1.03)
+
+if (shortCond)
+    strategy.entry("Sell_Short", strategy.short)
+    strategy.exit("SL_TP_Short", "Sell_Short", stop=close * 1.015, limit=close * 0.97)

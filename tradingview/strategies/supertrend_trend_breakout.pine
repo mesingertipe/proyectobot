@@ -1,0 +1,72 @@
+//@version=5
+strategy("BingX Bot - Supertrend Breakout + ATR Risk [CLR]", overlay=true, initial_capital=100, default_qty_type=strategy.percent_of_equity, default_qty_value=15)
+
+// ==========================================
+// CONFIGURACIÓN DE PARÁMETROS Y ALERTA JSON
+// ==========================================
+var string PASSPHRASE = "clr_bingx_secret_passphrase_2026"
+var string SYMBOL = "BTC-USDT" // Cambiar según el par: ETH-USDT, SOL-USDT, etc.
+
+atrPeriod = input.int(10, title="Periodo ATR", group="Supertrend")
+factor = input.float(3.0, title="Factor Multiplicador ATR", group="Supertrend")
+
+adxLen = input.int(14, title="Longitud ADX", group="Filtro de Fuerza")
+adxThresh = input.int(20, title="Umbral Mínimo ADX", group="Filtro de Fuerza")
+
+riskReward = input.float(2.0, title="Ratio Riesgo/Beneficio (TP)", group="Gestión de Riesgo")
+riskPct = input.float(1.5, title="% Riesgo por Trade de Saldo Total", group="Gestión de Riesgo")
+leverage = input.int(5, title="Apalancamiento BingX", group="BingX Config")
+
+// ==========================================
+// CÁLCULOS INDICADORES
+// ==========================================
+[supertrend, direction] = ta.supertrend(factor, atrPeriod)
+
+// ADX para evitar mercados laterales sin fuerza
+[diplus, diminus, adx] = ta.dmi(adxLen, adxLen)
+
+// Condición de entrada LONG (Compra)
+longCondition = ta.change(direction) < 0 and adx > adxThresh
+
+// Condición de entrada SHORT (Venta)
+shortCondition = ta.change(direction) > 0 and adx > adxThresh
+
+// Plotting en el gráfico de TradingView
+plot(supertrend, color=direction < 0 ? color.green : color.red, linewidth=2, title="Supertrend")
+
+// ==========================================
+// CÁLCULO DINÁMICO DE STOP LOSS & TAKE PROFIT
+// ==========================================
+atr = ta.atr(14)
+var float longSL = na
+var float longTP = na
+var float shortSL = na
+var float shortTP = na
+
+if (longCondition)
+    longSL := close - (atr * 1.5)
+    longTP := close + ((close - longSL) * riskReward)
+    strategy.entry("Long", strategy.long)
+    strategy.exit("Exit Long", "Long", stop=longSL, limit=longTP)
+
+if (shortCondition)
+    shortSL := close + (atr * 1.5)
+    shortTP := close - ((shortSL - close) * riskReward)
+    strategy.entry("Short", strategy.short)
+    strategy.exit("Exit Short", "Short", stop=shortSL, limit=shortTP)
+
+// ==========================================
+// ALERTAS EN FORMATO JSON PARA EL BOT BINGX
+// ==========================================
+// Copia el siguiente texto en el campo "Message / Mensaje" al crear la Alerta en TradingView:
+/*
+{
+  "passphrase": "clr_bingx_secret_passphrase_2026",
+  "action": "{{strategy.order.action}}",
+  "symbol": "BTC-USDT",
+  "price": {{strategy.order.price}},
+  "leverage": 5,
+  "stop_loss": {{plot_0}},
+  "take_profit": {{plot_1}}
+}
+*/

@@ -1,0 +1,27 @@
+name: CI/CD Deploy to DigitalOcean
+
+on:
+  push:
+    branches:
+      - main
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Deploy to DigitalOcean Droplet via SSH
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.DROPLET_IP }}
+          username: root
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /root/CLR-Trading || git clone https://github.com/${{ github.repository }}.git /root/CLR-Trading
+            cd /root/CLR-Trading
+            git pull origin main || git pull origin master
+            chmod +x deploy.sh
+            ./deploy.sh
