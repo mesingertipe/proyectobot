@@ -185,13 +185,15 @@ class BotEngine:
             TradeRecord.status == "OPEN"
         ).order_by(TradeRecord.opened_at.desc()).first()
 
-        if not trade:
-            return {"success": False, "message": f"No se encontró una posición abierta para {symbol}"}
-
-        # Ejecutar cierre de posición real en BingX
+        # Ejecutar cierre de posición real en BingX SIEMPRE, sin importar la base de datos local
         close_resp = await self.client.close_position(symbol)
         if not close_resp.get("success"):
             print(f"[ENGINE CLOSE ERROR] No se pudo cerrar la posición real en BingX para {symbol}: {close_resp.get('error')}")
+
+        if not trade:
+            if close_resp.get("success"):
+                return {"success": True, "message": f"Posición cerrada en BingX (No estaba en BD local para {symbol})"}
+            return {"success": False, "message": f"No se encontró una posición abierta para {symbol} en BD ni BingX."}
 
         trade.exit_price = exit_price
         trade.closed_at = datetime.utcnow()
